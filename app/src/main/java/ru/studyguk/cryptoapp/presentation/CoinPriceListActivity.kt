@@ -1,16 +1,14 @@
-package ru.studyguk.cryptoapp
+package ru.studyguk.cryptoapp.presentation
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_coin_price_list.*
-import ru.studyguk.cryptoapp.adapters.CoinInfoAdapter
-import ru.studyguk.cryptoapp.pojo.CoinPriceInfo
+import ru.studyguk.cryptoapp.R
+import ru.studyguk.cryptoapp.presentation.adapters.CoinInfoAdapter
+import ru.studyguk.cryptoapp.data.model.CoinPriceInfo
 
 class CoinPriceListActivity : AppCompatActivity() {
     private lateinit var viewModel: CoinViewModel
@@ -27,7 +25,10 @@ class CoinPriceListActivity : AppCompatActivity() {
 //                    coinPriceInfo.fromSymbol,
 //                    Snackbar.LENGTH_SHORT
 //                ).show()
-                val intent = CoinDetailActivity.newIntent(this@CoinPriceListActivity, coinPriceInfo.fromSymbol)
+                val intent = CoinDetailActivity.newIntent(
+                    this@CoinPriceListActivity,
+                    coinPriceInfo.fromSymbol
+                )
                 startActivity(intent)
             }
         }

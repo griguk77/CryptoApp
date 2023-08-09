@@ -1,11 +1,11 @@
-package ru.studyguk.cryptoapp.database
+package ru.studyguk.cryptoapp.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import ru.studyguk.cryptoapp.pojo.CoinPriceInfo
+import ru.studyguk.cryptoapp.data.model.CoinPriceInfo
 
 @Dao
 interface CoinPriceInfoDao {

@@ -1,4 +1,4 @@
-package ru.studyguk.cryptoapp.adapters
+package ru.studyguk.cryptoapp.presentation.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_coin_info.view.*
 import ru.studyguk.cryptoapp.R
-import ru.studyguk.cryptoapp.pojo.CoinPriceInfo
+import ru.studyguk.cryptoapp.data.model.CoinPriceInfo
 
 class CoinInfoAdapter(private val context: Context) : RecyclerView.Adapter<CoinInfoAdapter.CoinInfoViewHolder>() {
 

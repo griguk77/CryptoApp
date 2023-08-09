@@ -1,10 +1,10 @@
-package ru.studyguk.cryptoapp.api
+package ru.studyguk.cryptoapp.data.network
 
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ru.studyguk.cryptoapp.pojo.CoinInfoListOfData
-import ru.studyguk.cryptoapp.pojo.CoinPriceInfoRawData
+import ru.studyguk.cryptoapp.data.model.CoinInfoListOfData
+import ru.studyguk.cryptoapp.data.model.CoinPriceInfoRawData
 
 interface ApiService {
 

@@ -1,4 +1,4 @@
-package ru.studyguk.cryptoapp.pojo
+package ru.studyguk.cryptoapp.data.model
 
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
