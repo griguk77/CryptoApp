@@ -2,42 +2,47 @@ package ru.studyguk.cryptoapp.presentation
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_coin_detail.*
 import ru.studyguk.cryptoapp.R
+import ru.studyguk.cryptoapp.data.network.ApiFactory.BASE_IMAGE_URL
+import ru.studyguk.cryptoapp.databinding.ActivityCoinDetailBinding
+import ru.studyguk.cryptoapp.utils.convertTimeStampToTime
 
 class CoinDetailActivity : AppCompatActivity() {
     private lateinit var viewModel: CoinViewModel
 
+    private lateinit var binding: ActivityCoinDetailBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_coin_detail)
+        binding = ActivityCoinDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         if (!intent.hasExtra(EXTRA_FROM_SYMBOL)) {
             finish()
             return
         }
-        val fSym = intent.getStringExtra(EXTRA_FROM_SYMBOL)
-        viewModel = ViewModelProviders.of(this)[CoinViewModel::class.java]
-        if (fSym != null) {
-            viewModel.getDetailInfo(fSym).observe(this, Observer {
+        val fSym = intent.getStringExtra(EXTRA_FROM_SYMBOL) ?: EMPTY_SYMBOL
+        viewModel = ViewModelProvider(this)[CoinViewModel::class.java]
+        viewModel.getDetailInfo(fSym).observe(this) {
+            with(binding) {
                 tvPrice.text = it.price
                 tvMinPrice.text = it.lowDay
                 tvMaxPrice.text = it.highDay
                 tvLastDeal.text = it.lastMarket
-                tvUpdate.text = it.getFormattedTime()
+                tvUpdate.text = convertTimeStampToTime(it.lastUpdate)
                 tvFromSymb.text = it.fromSymbol
                 tvToSymb.text = it.toSymbol
-                Picasso.get().load(it.getFullImageUrl()).into(ivLogoCoinDetail)
-            })
+                Picasso.get().load(BASE_IMAGE_URL + it.imageUrl).into(ivLogoCoinDetail)
+            }
         }
     }
 
     companion object {
         private const val EXTRA_FROM_SYMBOL = "fSym"
+        private const val EMPTY_SYMBOL = ""
 
         fun newIntent(context: Context, fSym: String): Intent {
             val intent = Intent(context, CoinDetailActivity::class.java)

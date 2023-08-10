@@ -2,24 +2,24 @@ package ru.studyguk.cryptoapp.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_coin_price_list.*
-import ru.studyguk.cryptoapp.R
+import ru.studyguk.cryptoapp.databinding.ActivityCoinPriceListBinding
+import ru.studyguk.cryptoapp.domain.CoinInfo
 import ru.studyguk.cryptoapp.presentation.adapters.CoinInfoAdapter
-import ru.studyguk.cryptoapp.data.model.CoinPriceInfo
 
 class CoinPriceListActivity : AppCompatActivity() {
     private lateinit var viewModel: CoinViewModel
+    private lateinit var binding: ActivityCoinPriceListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_coin_price_list)
+        binding = ActivityCoinPriceListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val adapter = CoinInfoAdapter(this)
-        rvCoinPriceList.adapter = adapter
+        binding.rvCoinPriceList.adapter = adapter
         adapter.onCoinClickListener = object : CoinInfoAdapter.OnCoinClickListener {
-            override fun onCoinClick(coinPriceInfo: CoinPriceInfo) {
+            override fun onCoinClick(coinPriceInfo: CoinInfo) {
 //                Snackbar.make(
 //                    constraintLayout,
 //                    coinPriceInfo.fromSymbol,
@@ -32,14 +32,14 @@ class CoinPriceListActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-        viewModel = ViewModelProviders.of(this)[CoinViewModel::class.java]
-        viewModel.priceList.observe(this, Observer {
+        viewModel = ViewModelProvider(this)[CoinViewModel::class.java]
+        viewModel.coinInfoList.observe(this) {
             adapter.coinInfoList = it
             Snackbar.make(
-                constraintLayout,
+                binding.constraintLayout,
                 "Данные обновлены",
                 Snackbar.LENGTH_SHORT
             ).show()
-        })
+        }
     }
 }
