@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import ru.studyguk.cryptoapp.R
 import ru.studyguk.cryptoapp.databinding.ActivityCoinPriceListBinding
 import ru.studyguk.cryptoapp.domain.CoinInfo
 import ru.studyguk.cryptoapp.presentation.adapters.CoinInfoAdapter
@@ -22,11 +23,11 @@ class CoinPriceListActivity : AppCompatActivity() {
         binding.rvCoinPriceList.itemAnimator = null
         adapter.onCoinClickListener = object : CoinInfoAdapter.OnCoinClickListener {
             override fun onCoinClick(coinPriceInfo: CoinInfo) {
-                val intent = CoinDetailActivity.newIntent(
-                    this@CoinPriceListActivity,
-                    coinPriceInfo.fromSymbol
-                )
-                startActivity(intent)
+                if (isOnePaneMode()) {
+                    launchDetailActivity(coinPriceInfo.fromSymbol)
+                } else {
+                    launchDetailFragment(coinPriceInfo.fromSymbol)
+                }
             }
         }
         viewModel = ViewModelProvider(this)[CoinViewModel::class.java]
@@ -38,5 +39,25 @@ class CoinPriceListActivity : AppCompatActivity() {
                 Snackbar.LENGTH_SHORT
             ).show()
         }
+    }
+
+    private fun isOnePaneMode() = binding.fragmentContainer == null
+
+    private fun launchDetailActivity(fSym: String) {
+        val intent = CoinDetailActivity.newIntent(
+            this@CoinPriceListActivity,
+            fSym
+        )
+        startActivity(intent)
+    }
+
+    private fun launchDetailFragment(fSym: String) {
+        supportFragmentManager
+            .popBackStack()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, CoinDetailFragment.newInstance(fSym))
+            .addToBackStack(null)
+            .commit()
     }
 }
