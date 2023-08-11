@@ -19,13 +19,9 @@ class CoinPriceListActivity : AppCompatActivity() {
         setContentView(binding.root)
         val adapter = CoinInfoAdapter(this)
         binding.rvCoinPriceList.adapter = adapter
+        binding.rvCoinPriceList.itemAnimator = null
         adapter.onCoinClickListener = object : CoinInfoAdapter.OnCoinClickListener {
             override fun onCoinClick(coinPriceInfo: CoinInfo) {
-//                Snackbar.make(
-//                    constraintLayout,
-//                    coinPriceInfo.fromSymbol,
-//                    Snackbar.LENGTH_SHORT
-//                ).show()
                 val intent = CoinDetailActivity.newIntent(
                     this@CoinPriceListActivity,
                     coinPriceInfo.fromSymbol
@@ -35,7 +31,7 @@ class CoinPriceListActivity : AppCompatActivity() {
         }
         viewModel = ViewModelProvider(this)[CoinViewModel::class.java]
         viewModel.coinInfoList.observe(this) {
-            adapter.coinInfoList = it
+            adapter.submitList(it)
             Snackbar.make(
                 binding.constraintLayout,
                 "Данные обновлены",

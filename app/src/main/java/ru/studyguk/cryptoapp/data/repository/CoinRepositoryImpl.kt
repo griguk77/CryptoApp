@@ -32,15 +32,17 @@ class CoinRepositoryImpl(private val application: Application) : CoinRepository 
     }
 
     override suspend fun loadData() {
-        try {
-            val topCoins = apiService.getTopCoinsInfo()
-            val fSyms = mapper.mapNamesListToString(topCoins)
-            val jsonContainer = apiService.getFullPriceList(fSyms = fSyms)
-            val coinInfoDtoList = mapper.mapJsonContainerToListCoinInfo(jsonContainer)
-            val dbModelList = coinInfoDtoList.map { mapper.mapDtoToDbModel(it) }
-            coinInfoDao.insertPriceList(dbModelList)
-        } catch (e: Exception) {
+        while (true) {
+            try {
+                val topCoins = apiService.getTopCoinsInfo()
+                val fSyms = mapper.mapNamesListToString(topCoins)
+                val jsonContainer = apiService.getFullPriceList(fSyms = fSyms)
+                val coinInfoDtoList = mapper.mapJsonContainerToListCoinInfo(jsonContainer)
+                val dbModelList = coinInfoDtoList.map { mapper.mapDtoToDbModel(it) }
+                coinInfoDao.insertPriceList(dbModelList)
+            } catch (e: Exception) {
+            }
+            delay(10000)
         }
-        delay(10000)
     }
 }
